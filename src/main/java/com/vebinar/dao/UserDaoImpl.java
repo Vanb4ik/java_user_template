@@ -16,6 +16,26 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     public JdbcTemplate jdbcTemplate;
 
+    public void save(User user) {
+        String sql = "INSERT INTO user (name, age, email) VALUES(?, ?, ?)";
+        jdbcTemplate.update(sql, user.getName(),user.getAge(),user.getEmail());
+    }
+
+    public User getByID(int id) {
+        String sql = "SELECT * FROM user WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new UserMapper(), id);
+    }
+
+    public void delete(int id) {
+        String sql = "DELETE FROM user WHERE  id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    public void update(User user) {
+        String sql = "UPDATE user SET name = ?, email = ?, age =? WHERE id = ?";
+       jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getAge(), user.getId());
+    }
+
     public List<User> findAll() {
         String sql = "SELECT * FROM user";
         return jdbcTemplate.query(sql, new UserMapper());
